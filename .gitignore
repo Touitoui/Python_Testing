@@ -5,3 +5,6 @@ lib
 tests/
 .envrc
 __pycache__
+Scripts/
+CACHEDIR.TAG
+pyvenv.cfg

@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from flask import Flask,render_template,request,redirect,flash,url_for
 
 
@@ -31,7 +32,7 @@ def showSummary():
         club = club[0]
     else:
         return render_template('index.html')
-    return render_template('welcome.html',club=club,competitions=competitions)
+    return render_template('welcome.html', club=club, competitions=competitions, now=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 
 @app.route('/book/<competition>/<club>')
@@ -42,7 +43,7 @@ def book(competition,club):
         return render_template('booking.html',club=foundClub,competition=foundCompetition)
     else:
         flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return render_template('welcome.html', club=club, competitions=competitions, now=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 
 @app.route('/purchasePlaces',methods=['POST'])
@@ -51,9 +52,14 @@ def purchasePlaces():
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     placesRequired = int(request.form['places'])
     clubPoints = int(club['points'])
+    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # TODO: Check if a club has already booked places in this competition
     maxPlaces = 12
+
+    if competition['date'] <= now_str:
+        flash('Cannot book places for past competitions.')
+        return render_template('welcome.html', club=club, competitions=competitions, now=now_str)
     if placesRequired > maxPlaces:
         flash('You cannot book more than 12 places.')
         return render_template('welcome.html', club=club, competitions=competitions)
@@ -70,7 +76,7 @@ def purchasePlaces():
     competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
     club['points'] = int(club['points']) - placesRequired
     flash('Great-booking complete!')
-    return render_template('welcome.html', club=club, competitions=competitions)
+    return render_template('welcome.html', club=club, competitions=competitions, now=now_str)
 
 
 # TODO: Add route for points display

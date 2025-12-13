@@ -1,0 +1,33 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Points Display || GUDLFT</title>
+        <style>
+            tbody tr:nth-child(odd) {
+                background-color: #f2f2f2;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Points Display</h2>
+        <table>
+            <thead>
+                <tr>
+                <th scope="col">Club</th>
+                <th scope="col">Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                    {% for club in clubs%}
+                <tr>
+                    <td>{{club['name']}}</td>
+                    <td>{{club['points']}}</td>
+                </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+        <br />
+        <a href="javascript:history.back()">Back</a>
+    </body>
+</html>
